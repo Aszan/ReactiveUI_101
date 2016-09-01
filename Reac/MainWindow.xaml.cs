@@ -29,5 +29,10 @@ namespace Reac
             get { return ViewModel; }
             set { ViewModel = (MainViewModel)value; }
         }
+
+        private async void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            await ViewModel.Bot();
+        }
     }
 }

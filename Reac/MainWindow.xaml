@@ -5,8 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Reac"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow"
+        Height="350"
+        Width="525" 
+        Loaded="MainWindow_OnLoaded">
     <Grid>
-        <TextBlock Text="{Binding Dog, FallbackValue='Dog'}" />
+        <TextBlock Text="{Binding Dog, Mode=OneWay}"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
     </Grid>
 </Window>
