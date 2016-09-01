@@ -1,7 +1,9 @@
 ﻿#region Using directives
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,32 +13,49 @@ using ReactiveUI;
 
 namespace Reac
 {
-    public interface IDuck
+    public interface IDuck : INotifyPropertyChanged
     {
         IChicken Chicken { get; }
         void Foo();
     }
 
-    public interface IChicken
+    public interface IChicken : INotifyPropertyChanged
     {
+        IEnumerable<string> Names { get; }
+        void Rename();
     }
 
     public class Chicken : IChicken
     {
+        private readonly List<string> _names = new List<string>();
+
+        #region Implementation of IChicken
+
+        public IEnumerable<string> Names => _names;
+
+        public void Rename()
+        {
+            _names.Add(Guid.NewGuid().ToString());
+            PropertyChanged(this, new PropertyChangedEventArgs(nameof(Names)));
+        }
+
+        #endregion
+
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
     }
 
-    public class Duck : IDuck, INotifyPropertyChanged 
+    public class Duck : IDuck
     {
-        public IChicken Chicken { get; private set; }
+        public IChicken Chicken { get; }
 
         public Duck()
         {
-            Foo();
+            Chicken = new Chicken();
         }
 
         public void Foo()
         {
-            Chicken = new Chicken();
+            Chicken.Rename();
             PropertyChanged(this, new PropertyChangedEventArgs(nameof(Chicken)));
         }
 
